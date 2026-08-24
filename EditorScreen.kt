@@ -29,11 +29,13 @@ import com.example.ocrsheettoword.feature.ocr.OcrViewModel
 import kotlinx.coroutines.launch
 import com.example.ocrsheettoword.data.document.DocumentFormatting
 import com.example.ocrsheettoword.data.document.PoiDocxExporter
+import com.example.ocrsheettoword.feature.Pages.PageManagerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditorScreen(
     viewModel: OcrViewModel,
+	 pageManagerViewModel: PageManagerViewModel,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -81,7 +83,9 @@ fun EditorScreen(
 
                 message = result.fold(
                     onSuccess = {
+						pageManagerViewModel.clearSession()
                         "TXT file saved successfully."
+						
                     },
                     onFailure = {
                         it.message ?: "Unable to save TXT file."
@@ -124,6 +128,7 @@ val docxLauncher = rememberLauncherForActivityResult(
 
             message = result.fold(
                 onSuccess = {
+					pageManagerViewModel.clearSession()
                     "Word DOCX file saved successfully."
                 },
                 onFailure = {
